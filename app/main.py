@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.api import health
 
-@app.get("/")
-async def read_root():
-    return {"Hello": "Jollof"}
+app = FastAPI(title="Property Listings API", version="0.1.0")
+
+app.include_router(health.router)
