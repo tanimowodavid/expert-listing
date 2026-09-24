@@ -41,7 +41,7 @@ The API lets clients:
 cp .env.example .env
 
 # 2. Build and start the API and the database
-docker compose up --build
+docker compose up --build -d
 ```
 
 Then check that everything is up:
@@ -55,22 +55,22 @@ Interactive API docs are available at <http://localhost:8000/docs>.
 
 Stop the stack with `Ctrl+C` or `docker compose down`. Add `-v` to also delete the database volume.
 
-### Configuration
-
-| Variable            | Description                                                                                                                   |
-| ------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `POSTGRES_USER`     | Database user (used by the `db` container and Compose)                                                                        |
-| `POSTGRES_PASSWORD` | Database password                                                                                                             |
-| `POSTGRES_DB`       | Database name                                                                                                                 |
-| `DATABASE_URL`      | SQLAlchemy connection URL. Compose sets this for the API container; set it in `.env` only when running the API outside Docker |
-
 ### Database migrations
 
 With the database running, apply the schema:
 
 ```bash
-uv run alembic upgrade head
+docker compose exec api alembic upgrade head
 ```
+
+### Seed sample data
+
+```bash
+docker compose exec api python -m app.seed            # adds 3 agents and 24 Lagos listings; safe to re-run
+```
+
+Coordinates are approximate neighbourhood centres. By convention in the seed data, rent
+prices are per year, shortlet prices are per night, and sale prices are the total (naira).
 
 ## Architecture
 
