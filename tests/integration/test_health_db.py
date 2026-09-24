@@ -4,16 +4,7 @@ from sqlalchemy.exc import OperationalError
 
 from app.core.database import engine
 
-pytestmark = pytest.mark.integration
-
-
-@pytest.fixture(scope="module", autouse=True)
-def require_database():
-    try:
-        with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
-    except OperationalError:
-        pytest.skip("Database not reachable. Start it with: docker compose up -d db")
+pytestmark = [pytest.mark.integration, pytest.mark.usefixtures("test_database")]
 
 
 def test_readiness_against_real_database(client):
