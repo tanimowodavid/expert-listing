@@ -200,7 +200,8 @@ class TestSearchGeo:
 
     def test_radius_boundary_is_respected(self, listing_repo, market):
         hits, _ = run_search(listing_repo, radius_km=10, **LEKKI)
-        vi_distance = dict((l.id, d) for l, d in hits)[market["vi"].id]
+        distances = {listing.id: distance for listing, distance in hits}
+        vi_distance = distances[market["vi"].id]
 
         just_inside, _ = run_search(listing_repo, radius_km=vi_distance + 0.01, **LEKKI)
         just_outside, _ = run_search(listing_repo, radius_km=vi_distance - 0.01, **LEKKI)
@@ -243,7 +244,7 @@ class TestPagination:
         first, _ = run_search(listing_repo, limit=5)
         second, _ = run_search(listing_repo, limit=5)
 
-        assert [l.id for l, _ in first] == [l.id for l, _ in second]
+        assert [listing.id for listing, _ in first] == [listing.id for listing, _ in second]
 
     def test_offset_past_the_end_returns_empty_page_with_total(self, listing_repo, five):
         hits, total = run_search(listing_repo, limit=2, offset=10)

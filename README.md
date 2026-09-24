@@ -1,4 +1,4 @@
-![CI](https://github.com/tanimowodavid/expert-listing.git/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/tanimowodavid/expert-listing/actions/workflows/ci.yml/badge.svg)
 
 # Expert Listing Limited
 
