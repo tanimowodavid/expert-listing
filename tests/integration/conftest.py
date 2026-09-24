@@ -6,6 +6,10 @@ from app.models import ListingType
 from app.repositories import AgentRepository, ListingRepository
 from app.schemas import AgentCreate, ListingCreate
 
+from fastapi.testclient import TestClient
+
+from app.core.database import get_db
+from app.main import app
 
 @pytest.fixture
 def agent(db_session):
@@ -37,3 +41,16 @@ def make_listing(listing_repo, agent):
         return listing_repo.create(ListingCreate(**data))
 
     return _make
+
+
+@pytest.fixture
+def api(db_session):
+    """A test client whose requests all run inside the test's rolled-back transaction."""
+
+    def override_get_db():
+        yield db_session
+
+    app.dependency_overrides[get_db] = override_get_db
+    with TestClient(app) as test_client:
+        yield test_client
+    app.dependency_overrides.clear()
