@@ -6,6 +6,7 @@ from typing import Annotated, Self
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from app.models import ListingType
+from app.schemas.pagination import PaginationParams
 
 # One definition per rule, reused by create, update and search.
 Title = Annotated[str, Field(min_length=1, max_length=200)]
@@ -81,14 +82,27 @@ class ListingSearchResult(ListingRead):
 class ListingSearchParams(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    listing_type: ListingType | None = None
-    min_price: PriceFilter | None = None
-    max_price: PriceFilter | None = None
-    min_bedrooms: Annotated[int, Field(ge=0)] | None = None
-    max_bedrooms: Annotated[int, Field(ge=0)] | None = None
-    latitude: Latitude | None = None
-    longitude: Longitude | None = None
-    radius_km: Annotated[float, Field(gt=0, le=100)] | None = None
+    listing_type: ListingType | None = Field(default=None, description="rent, sale or shortlet")
+    min_price: PriceFilter | None = Field(default=None, description="Minimum price, inclusive")
+    max_price: PriceFilter | None = Field(default=None, description="Maximum price, inclusive")
+    min_bedrooms: Annotated[int, Field(ge=0)] | None = Field(
+        default=None, description="Minimum bedrooms, inclusive (0 = studio)"
+    )
+    max_bedrooms: Annotated[int, Field(ge=0)] | None = Field(
+        default=None, description="Maximum bedrooms, inclusive"
+    )
+    latitude: Latitude | None = Field(
+        default=None,
+        description="Centre of a radius search. Needs longitude and radius_km too",
+    )
+    longitude: Longitude | None = Field(
+        default=None,
+        description="Centre of a radius search. Needs latitude and radius_km too",
+    )
+    radius_km: Annotated[float, Field(gt=0, le=100)] | None = Field(
+        default=None,
+        description="Search radius in km (max 100). Results are sorted nearest first",
+    )
 
     @model_validator(mode="after")
     def check_consistency(self) -> Self:
@@ -113,3 +127,7 @@ class ListingSearchParams(BaseModel):
     @property
     def has_geo_filter(self) -> bool:
         return self.latitude is not None
+
+
+class ListingQuery(ListingSearchParams, PaginationParams):
+    """Everything accepted in the query string of GET /listings."""

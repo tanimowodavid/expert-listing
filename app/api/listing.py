@@ -1,9 +1,17 @@
 import uuid
+from typing import Annotated
 
-from fastapi import APIRouter, Request, Response, status
+from fastapi import APIRouter, Query, Request, Response, status
 
 from app.api.dependencies import ListingServiceDep
-from app.schemas import ListingCreate, ListingRead, ListingUpdate
+from app.schemas import (
+    ListingCreate,
+    ListingQuery,
+    ListingRead,
+    ListingSearchResult,
+    ListingUpdate,
+    Page,
+)
 
 router = APIRouter(prefix="/listings", tags=["listings"])
 
@@ -26,6 +34,25 @@ def create_listing(
         request.app.url_path_for("get_listing", listing_id=str(listing.id))
     )
     return listing
+
+
+@router.get(
+    "",
+    response_model=Page[ListingSearchResult],
+    summary="Search and list listings",
+    description=(
+        "Filter by type, price range and bedrooms. Add latitude, longitude and "
+        "radius_km to return only listings within that distance, nearest first "
+        "(each result then includes distance_km). Without a location filter, "
+        "results are newest first."
+    ),
+    responses={422: {"description": "Invalid filter or pagination parameters"}},
+)
+def search_listings(query: Annotated[ListingQuery, Query()], service: ListingServiceDep):
+    results, total = service.search(query, limit=query.limit, offset=query.offset)
+    return Page[ListingSearchResult](
+        items=results, total=total, limit=query.limit, offset=query.offset
+    )
 
 
 @router.get(
