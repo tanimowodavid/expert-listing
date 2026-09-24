@@ -18,4 +18,3 @@ register_exception_handlers(app)
 app.include_router(health.router)
 app.include_router(agent.router)
 app.include_router(listing.router)
-

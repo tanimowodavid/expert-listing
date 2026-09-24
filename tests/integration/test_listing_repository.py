@@ -27,12 +27,8 @@ def ids(hits):
 def market(make_listing):
     """Four listings across Lagos with different types, prices and sizes."""
     return {
-        "yaba": make_listing(
-            title="Yaba 1-bed", price=Decimal("1000000"), bedrooms=1, **YABA
-        ),
-        "lekki": make_listing(
-            title="Lekki 2-bed", price=Decimal("2000000"), bedrooms=2, **LEKKI
-        ),
+        "yaba": make_listing(title="Yaba 1-bed", price=Decimal("1000000"), bedrooms=1, **YABA),
+        "lekki": make_listing(title="Lekki 2-bed", price=Decimal("2000000"), bedrooms=2, **LEKKI),
         "vi": make_listing(
             title="VI 3-bed shortlet",
             price=Decimal("3000000"),
@@ -112,9 +108,7 @@ class TestUpdate:
         assert listing.description is None
 
     @pytest.mark.parametrize("field", ["is_active", "agent_id", "id", "created_at"])
-    def test_rejects_fields_that_must_not_change(
-        self, listing_repo, make_listing, field
-    ):
+    def test_rejects_fields_that_must_not_change(self, listing_repo, make_listing, field):
         with pytest.raises(ValueError):
             listing_repo.update(make_listing(), {field: "anything"})
 
@@ -188,9 +182,7 @@ class TestSearchFilters:
 
 
 class TestSearchGeo:
-    def test_returns_only_listings_within_radius_nearest_first(
-        self, listing_repo, market
-    ):
+    def test_returns_only_listings_within_radius_nearest_first(self, listing_repo, market):
         hits, total = run_search(listing_repo, radius_km=10, **LEKKI)
 
         assert [listing.id for listing, _ in hits] == [
@@ -229,9 +221,7 @@ class TestSearchGeo:
         assert hits == []
 
     def test_geo_combines_with_other_filters(self, listing_repo, market):
-        hits, _ = run_search(
-            listing_repo, radius_km=25, listing_type="rent", **LEKKI
-        )
+        hits, _ = run_search(listing_repo, radius_km=25, listing_type="rent", **LEKKI)
 
         assert ids(hits) == {market["lekki"].id, market["yaba"].id}
 
@@ -255,9 +245,7 @@ class TestPagination:
 
         assert [l.id for l, _ in first] == [l.id for l, _ in second]
 
-    def test_offset_past_the_end_returns_empty_page_with_total(
-        self, listing_repo, five
-    ):
+    def test_offset_past_the_end_returns_empty_page_with_total(self, listing_repo, five):
         hits, total = run_search(listing_repo, limit=2, offset=10)
 
         assert hits == []

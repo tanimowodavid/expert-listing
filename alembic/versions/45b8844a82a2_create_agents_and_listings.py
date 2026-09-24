@@ -1,22 +1,23 @@
 """create agents and listings
 
 Revision ID: 45b8844a82a2
-Revises: 
+Revises:
 Create Date: 2026-09-24 07:51:12.832445
 
 """
-from typing import Union
+
 from collections.abc import Sequence
 
 import geoalchemy2
 import sqlalchemy as sa
+
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = '45b8844a82a2'
-down_revision: Union[str, Sequence[str], None] = None
-branch_labels: Union[str, Sequence[str], None] = None
-depends_on: Union[str, Sequence[str], None] = None
+revision: str = "45b8844a82a2"
+down_revision: str | Sequence[str] | None = None
+branch_labels: str | Sequence[str] | None = None
+depends_on: str | Sequence[str] | None = None
 
 
 def upgrade() -> None:
@@ -78,9 +79,7 @@ def upgrade() -> None:
     op.create_index("ix_listings_agent_id", "listings", ["agent_id"])
     op.create_index("ix_listings_bedrooms", "listings", ["bedrooms"])
     op.create_index("ix_listings_type_price", "listings", ["listing_type", "price"])
-    op.create_index(
-        "ix_listings_location", "listings", ["location"], postgresql_using="gist"
-    )
+    op.create_index("ix_listings_location", "listings", ["location"], postgresql_using="gist")
 
 
 def downgrade() -> None:

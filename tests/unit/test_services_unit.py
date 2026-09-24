@@ -81,9 +81,7 @@ class TestListingUpdate:
         )
         db.commit.assert_called_once()
 
-    def test_missing_listing_is_not_found_and_nothing_is_saved(
-        self, listing_service, db
-    ):
+    def test_missing_listing_is_not_found_and_nothing_is_saved(self, listing_service, db):
         listing_service.listings.get.return_value = None
 
         with pytest.raises(NotFoundError):
@@ -102,9 +100,7 @@ class TestListingDelete:
         listing_service.listings.soft_delete.assert_called_once_with(listing)
         db.commit.assert_called_once()
 
-    def test_missing_listing_is_not_found_and_nothing_is_saved(
-        self, listing_service, db
-    ):
+    def test_missing_listing_is_not_found_and_nothing_is_saved(self, listing_service, db):
         listing_service.listings.get.return_value = None
 
         with pytest.raises(NotFoundError):
@@ -126,9 +122,7 @@ class TestAgentCreate:
         agent_service.agents.create.assert_not_called()
         db.commit.assert_not_called()
 
-    def test_race_on_unique_constraint_becomes_a_conflict_and_rolls_back(
-        self, agent_service, db
-    ):
+    def test_race_on_unique_constraint_becomes_a_conflict_and_rolls_back(self, agent_service, db):
         # The pre-check passes, but the database still rejects the insert
         agent_service.agents.get_by_email.return_value = None
         agent_service.agents.create.side_effect = IntegrityError("INSERT", {}, Exception())

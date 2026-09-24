@@ -3,13 +3,13 @@ from collections.abc import Generator
 from pathlib import Path
 
 import pytest
-from alembic import command
 from alembic.config import Config
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import make_url
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import Session
 
+from alembic import command
 from app.core.config import Settings
 
 ROOT = Path(__file__).resolve().parents[1]

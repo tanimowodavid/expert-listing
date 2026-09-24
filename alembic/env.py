@@ -1,10 +1,10 @@
 from logging.config import fileConfig
 
-from alembic import context
 from geoalchemy2 import alembic_helpers
 from sqlalchemy import engine_from_config, pool
 
 import app.models  # noqa: F401  (registers the tables on Base.metadata)
+from alembic import context
 from app.core.config import get_settings
 from app.core.database import Base
 

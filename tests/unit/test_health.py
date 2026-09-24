@@ -46,16 +46,14 @@ def test_readiness_returns_ready_when_database_responds(client):
 
 def test_readiness_returns_503_when_database_is_down(client):
     db = MagicMock()
-    db.execute.side_effect = OperationalError(
-        "SELECT 1", {}, Exception("connection refused")
-    )
+    db.execute.side_effect = OperationalError("SELECT 1", {}, Exception("connection refused"))
     use_db(db)
 
     response = client.get("/health/ready")
 
     assert response.status_code == 503
     assert response.json() == {
-    "error": {"code": "service_unavailable", "message": "Database unavailable"}
+        "error": {"code": "service_unavailable", "message": "Database unavailable"}
     }
 
 

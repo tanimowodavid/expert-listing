@@ -26,7 +26,6 @@ def test_created_agent_can_be_fetched(api):
     assert response.json()["id"] == agent_id
 
 
-
 def test_duplicate_email_returns_409(api):
     api.post("/agents", json=PAYLOAD)
 

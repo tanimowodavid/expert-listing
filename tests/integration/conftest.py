@@ -1,15 +1,14 @@
 from decimal import Decimal
 
 import pytest
-
-from app.models import ListingType
-from app.repositories import AgentRepository, ListingRepository
-from app.schemas import AgentCreate, ListingCreate
-
 from fastapi.testclient import TestClient
 
 from app.core.database import get_db
 from app.main import app
+from app.models import ListingType
+from app.repositories import AgentRepository, ListingRepository
+from app.schemas import AgentCreate, ListingCreate
+
 
 @pytest.fixture
 def agent(db_session):

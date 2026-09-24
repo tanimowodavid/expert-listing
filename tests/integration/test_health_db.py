@@ -1,6 +1,5 @@
 import pytest
 from sqlalchemy import inspect, text
-from sqlalchemy.exc import OperationalError
 
 from app.core.database import engine
 

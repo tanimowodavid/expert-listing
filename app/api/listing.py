@@ -44,9 +44,7 @@ def get_listing(listing_id: uuid.UUID, service: ListingServiceDep):
     summary="Partially update a listing",
     responses={404: {"description": "Listing not found"}},
 )
-def update_listing(
-    listing_id: uuid.UUID, data: ListingUpdate, service: ListingServiceDep
-):
+def update_listing(listing_id: uuid.UUID, data: ListingUpdate, service: ListingServiceDep):
     return service.update(listing_id, data)
 
 

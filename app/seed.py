@@ -31,9 +31,7 @@ AGENTS = {
     "tunde": AgentCreate(
         name="Tunde Bakare", email="tunde.bakare@example.com", phone="08023456789"
     ),
-    "ngozi": AgentCreate(
-        name="Ngozi Eze", email="ngozi.eze@example.com", phone="+2348034567890"
-    ),
+    "ngozi": AgentCreate(name="Ngozi Eze", email="ngozi.eze@example.com", phone="+2348034567890"),
 }
 
 # area -> (latitude, longitude)
@@ -59,40 +57,59 @@ AREAS = {
 
 # (agent, title, type, price, bedrooms, area, description)
 LISTINGS = [
-    ("ada", "Bright 2-bedroom apartment in Lekki Phase 1", RENT, 4_500_000, 2,
-     "Lekki Phase 1", "Tiled throughout, 24/7 power backup, close to shops."),
-    ("ada", "Serviced 3-bedroom flat, Lekki Phase 1", RENT, 8_000_000, 3,
-     "Lekki Phase 1", None),
-    ("ada", "Executive 1-bedroom apartment, Victoria Island", RENT, 6_500_000, 1,
-     "Victoria Island", None),
-    ("ada", "Luxury 3-bedroom shortlet, Victoria Island", SHORTLET, 150_000, 3,
-     "Victoria Island", "Per night. Pool, gym and concierge."),
+    (
+        "ada",
+        "Bright 2-bedroom apartment in Lekki Phase 1",
+        RENT,
+        4_500_000,
+        2,
+        "Lekki Phase 1",
+        "Tiled throughout, 24/7 power backup, close to shops.",
+    ),
+    ("ada", "Serviced 3-bedroom flat, Lekki Phase 1", RENT, 8_000_000, 3, "Lekki Phase 1", None),
+    (
+        "ada",
+        "Executive 1-bedroom apartment, Victoria Island",
+        RENT,
+        6_500_000,
+        1,
+        "Victoria Island",
+        None,
+    ),
+    (
+        "ada",
+        "Luxury 3-bedroom shortlet, Victoria Island",
+        SHORTLET,
+        150_000,
+        3,
+        "Victoria Island",
+        "Per night. Pool, gym and concierge.",
+    ),
     ("ada", "4-bedroom terrace duplex, Ikoyi", SALE, 320_000_000, 4, "Ikoyi", None),
     ("ada", "Modern studio shortlet, Ikoyi", SHORTLET, 65_000, 0, "Ikoyi", "Per night."),
     ("ada", "Waterfront 2-bedroom apartment, Oniru", RENT, 9_500_000, 2, "Oniru", None),
     ("ada", "Spacious 3-bedroom flat, Ajah", RENT, 3_500_000, 3, "Ajah", None),
-    ("ada", "Newly built 4-bedroom detached house, Ajah", SALE, 85_000_000, 4,
-     "Ajah", None),
-    ("ada", "5-bedroom detached mansion, Banana Island", SALE, 950_000_000, 5,
-     "Banana Island", None),
-    ("tunde", "Self-contained studio near the university, Yaba", RENT, 900_000, 0,
-     "Yaba", None),
+    ("ada", "Newly built 4-bedroom detached house, Ajah", SALE, 85_000_000, 4, "Ajah", None),
+    (
+        "ada",
+        "5-bedroom detached mansion, Banana Island",
+        SALE,
+        950_000_000,
+        5,
+        "Banana Island",
+        None,
+    ),
+    ("tunde", "Self-contained studio near the university, Yaba", RENT, 900_000, 0, "Yaba", None),
     ("tunde", "2-bedroom flat, Yaba", RENT, 2_200_000, 2, "Yaba", None),
     ("tunde", "3-bedroom flat, Surulere", RENT, 2_800_000, 3, "Surulere", None),
-    ("tunde", "Renovated 4-bedroom bungalow, Surulere", SALE, 70_000_000, 4,
-     "Surulere", None),
-    ("tunde", "Cosy 1-bedroom shortlet, Gbagada", SHORTLET, 45_000, 1, "Gbagada",
-     "Per night."),
-    ("tunde", "2-bedroom serviced apartment, Ilupeju", RENT, 3_800_000, 2,
-     "Ilupeju", None),
-    ("tunde", "3-bedroom flat with harbour view, Apapa", RENT, 5_000_000, 3,
-     "Apapa", None),
+    ("tunde", "Renovated 4-bedroom bungalow, Surulere", SALE, 70_000_000, 4, "Surulere", None),
+    ("tunde", "Cosy 1-bedroom shortlet, Gbagada", SHORTLET, 45_000, 1, "Gbagada", "Per night."),
+    ("tunde", "2-bedroom serviced apartment, Ilupeju", RENT, 3_800_000, 2, "Ilupeju", None),
+    ("tunde", "3-bedroom flat with harbour view, Apapa", RENT, 5_000_000, 3, "Apapa", None),
     ("ngozi", "4-bedroom duplex, Ikeja GRA", SALE, 180_000_000, 4, "Ikeja GRA", None),
     ("ngozi", "Modern 2-bedroom flat, Ikeja", RENT, 3_000_000, 2, "Ikeja", None),
-    ("ngozi", "Shortlet near the airport, Ikeja", SHORTLET, 55_000, 1, "Ikeja",
-     "Per night."),
-    ("ngozi", "1-bedroom shortlet, Maryland", SHORTLET, 50_000, 1, "Maryland",
-     "Per night."),
+    ("ngozi", "Shortlet near the airport, Ikeja", SHORTLET, 55_000, 1, "Ikeja", "Per night."),
+    ("ngozi", "1-bedroom shortlet, Maryland", SHORTLET, 50_000, 1, "Maryland", "Per night."),
     ("ngozi", "5-bedroom detached house, Magodo", SALE, 210_000_000, 5, "Magodo", None),
     ("ngozi", "Affordable 2-bedroom flat, Ikorodu", RENT, 1_200_000, 2, "Ikorodu", None),
     ("ngozi", "3-bedroom flat, Festac Town", RENT, 2_000_000, 3, "Festac", None),
@@ -147,9 +164,7 @@ def seed(db: Session) -> SeedResult:
     created = skipped = 0
     for data in build_listings(agent_ids):
         already_there = db.scalar(
-            select(Listing.id).where(
-                Listing.agent_id == data.agent_id, Listing.title == data.title
-            )
+            select(Listing.id).where(Listing.agent_id == data.agent_id, Listing.title == data.title)
         )
         if already_there is not None:
             skipped += 1
@@ -167,9 +182,7 @@ def reset(db: Session) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Seed the database with sample data.")
-    parser.add_argument(
-        "--reset", action="store_true", help="delete ALL agents and listings first"
-    )
+    parser.add_argument("--reset", action="store_true", help="delete ALL agents and listings first")
     parser.add_argument(
         "--yes", action="store_true", help="skip the confirmation prompt for --reset"
     )

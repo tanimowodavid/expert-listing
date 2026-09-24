@@ -51,9 +51,7 @@ class ListingService:
         hits, total = self.listings.search(params, limit=limit, offset=offset)
         results = [
             ListingSearchResult.model_validate(listing).model_copy(
-                update={
-                    "distance_km": None if distance is None else round(distance, 3)
-                }
+                update={"distance_km": None if distance is None else round(distance, 3)}
             )
             for listing, distance in hits
         ]

@@ -61,9 +61,7 @@ def test_missing_listing_uses_the_error_envelope(api):
     response = api.get(f"/listings/{uuid.uuid4()}")
 
     assert response.status_code == 404
-    assert response.json() == {
-        "error": {"code": "not_found", "message": "Listing not found"}
-    }
+    assert response.json() == {"error": {"code": "not_found", "message": "Listing not found"}}
 
 
 def test_stray_unique_violation_becomes_a_clean_409(db_session, agent):

@@ -62,9 +62,7 @@ async def handle_app_error(request: Request, exc: AppError) -> JSONResponse:
     return error_response(500, "internal_error", "Internal server error")
 
 
-async def handle_validation_error(
-    request: Request, exc: RequestValidationError
-) -> JSONResponse:
+async def handle_validation_error(request: Request, exc: RequestValidationError) -> JSONResponse:
     # Deliberately keep only "where" and "what". FastAPI's default body also echoes
     # the raw input (which may contain personal data) and internal context objects.
     details = [
@@ -74,14 +72,10 @@ async def handle_validation_error(
         }
         for error in exc.errors()
     ]
-    return error_response(
-        422, "validation_error", "Request validation failed", details=details
-    )
+    return error_response(422, "validation_error", "Request validation failed", details=details)
 
 
-async def handle_http_exception(
-    request: Request, exc: StarletteHTTPException
-) -> JSONResponse:
+async def handle_http_exception(request: Request, exc: StarletteHTTPException) -> JSONResponse:
     # Covers HTTPException raised by our code AND Starlette's own 404 (unknown route)
     # and 405 (wrong method), which never reach our routes.
     code = CODE_BY_STATUS.get(exc.status_code, "http_error")

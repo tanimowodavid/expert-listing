@@ -76,9 +76,7 @@ class TestListingUpdate:
     def test_partial_update_leaves_other_fields_alone(self, listing_service, agent):
         listing = listing_service.create(new_listing(agent.id, title="Old title"))
 
-        updated = listing_service.update(
-            listing.id, ListingUpdate(price="2500000")
-        )
+        updated = listing_service.update(listing.id, ListingUpdate(price="2500000"))
 
         assert updated.price == Decimal("2500000.00")
         assert updated.title == "Old title"
@@ -117,18 +115,14 @@ class TestListingDelete:
         gone = listing_service.create(new_listing(agent.id, title="Gone"))
         listing_service.delete(gone.id)
 
-        results, total = listing_service.search(
-            ListingSearchParams(), limit=10, offset=0
-        )
+        results, total = listing_service.search(ListingSearchParams(), limit=10, offset=0)
 
         assert [r.id for r in results] == [keep.id]
         assert total == 1
 
 
 class TestListingSearch:
-    def test_results_are_search_models_with_rounded_distance(
-        self, listing_service, agent
-    ):
+    def test_results_are_search_models_with_rounded_distance(self, listing_service, agent):
         listing_service.create(new_listing(agent.id, **LEKKI))
         listing_service.create(new_listing(agent.id, **IKEJA))
 

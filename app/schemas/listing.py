@@ -107,9 +107,7 @@ class ListingSearchParams(BaseModel):
 
         geo = (self.latitude, self.longitude, self.radius_km)
         if any(v is not None for v in geo) and any(v is None for v in geo):
-            raise ValueError(
-                "latitude, longitude and radius_km must be provided together"
-            )
+            raise ValueError("latitude, longitude and radius_km must be provided together")
         return self
 
     @property

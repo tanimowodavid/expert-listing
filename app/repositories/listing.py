@@ -93,17 +93,11 @@ class ListingRepository:
             origin = func.ST_GeogFromText(
                 f"SRID=4326;POINT({params.longitude:.7f} {params.latitude:.7f})"
             )
-            conditions.append(
-                func.ST_DWithin(Listing.location, origin, params.radius_km * 1000)
-            )
-            distance_km = (func.ST_Distance(Listing.location, origin) / 1000).label(
-                "distance_km"
-            )
+            conditions.append(func.ST_DWithin(Listing.location, origin, params.radius_km * 1000))
+            distance_km = (func.ST_Distance(Listing.location, origin) / 1000).label("distance_km")
             order_by = [distance_km, Listing.id]
 
-        total = self.db.scalar(
-            select(func.count()).select_from(Listing).where(*conditions)
-        )
+        total = self.db.scalar(select(func.count()).select_from(Listing).where(*conditions))
         rows = self.db.execute(
             select(Listing, distance_km)
             .where(*conditions)

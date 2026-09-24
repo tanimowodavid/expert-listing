@@ -19,6 +19,7 @@ dependencies = [
 dev = [
     "httpx>=0.28.1",
     "pytest>=9.1.1",
+    "ruff>=0.16.8",
 ]
 
 
@@ -28,3 +29,11 @@ testpaths = ["tests"]
 markers = [
     "integration: needs a running database",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+ignore = ["E501"]  # the formatter owns line length

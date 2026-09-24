@@ -44,7 +44,6 @@ class TestCreate:
         assert response.status_code == 200
         assert response.json() == created
 
-
     def test_unknown_agent_returns_422(self, api, payload):
         response = api.post("/listings", json={**payload, "agent_id": str(uuid.uuid4())})
 

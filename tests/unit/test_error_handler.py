@@ -166,9 +166,7 @@ class TestDatabaseErrors:
             ("23502", 422, "invalid_data"),  # not null
         ],
     )
-    def test_integrity_errors_are_translated_without_leaking(
-        self, sqlstate, status, code
-    ):
+    def test_integrity_errors_are_translated_without_leaking(self, sqlstate, status, code):
         error = IntegrityError("INSERT INTO secret_table", {}, FakeDriverError(sqlstate))
 
         response = client_that_raises(error).get("/boom")
