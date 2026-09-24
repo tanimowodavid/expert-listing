@@ -1,3 +1,5 @@
+![CI](https://github.com/tanimowodavid/expert-listing.git/actions/workflows/ci.yml/badge.svg)
+
 # Expert Listing Limited
 
 A backend API for managing and searching property listings (rent, sale, shortlet), including radius-based geospatial search. Built with FastAPI, PostgreSQL and PostGIS, using a layered architecture.

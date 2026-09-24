@@ -45,6 +45,8 @@ def test_database() -> Generator[None, None, None]:
             connection.execute(text(f"DROP DATABASE IF EXISTS {name} WITH (FORCE)"))
             connection.execute(text(f"CREATE DATABASE {name}"))
     except OperationalError:
+        if os.environ.get("CI"):
+            raise  # in CI a missing database is a failure, never a skip
         pytest.skip("Database server not reachable. Start it with: docker compose up -d db")
     finally:
         admin.dispose()
