@@ -2,10 +2,12 @@ import enum
 import uuid
 from datetime import datetime
 from decimal import Decimal
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, cast
 
 from geoalchemy2 import Geography
+from geoalchemy2.shape import to_shape
 from geoalchemy2.elements import WKBElement
+from shapely.geometry import Point
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
@@ -73,3 +75,11 @@ class Listing(Base):
     )
 
     agent: Mapped["Agent"] = relationship(back_populates="listings")
+
+    @property
+    def latitude(self) -> float:
+        return cast(Point, to_shape(self.location)).y
+
+    @property
+    def longitude(self) -> float:
+        return cast(Point, to_shape(self.location)).x

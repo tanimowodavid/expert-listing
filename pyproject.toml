@@ -10,5 +10,16 @@ dependencies = [
     "geoalchemy2>=0.20.0",
     "psycopg[binary]>=3.3.6",
     "pydantic-settings>=2.15.0",
+    "pydantic[email]>=2.13.5",
+    "shapely>=2.1.2",
     "sqlalchemy>=2.0.54",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
