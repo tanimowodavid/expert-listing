@@ -26,13 +26,15 @@ def test_created_agent_can_be_fetched(api):
     assert response.json()["id"] == agent_id
 
 
+
 def test_duplicate_email_returns_409(api):
     api.post("/agents", json=PAYLOAD)
 
     response = api.post("/agents", json={**PAYLOAD, "email": "tunde@example.com"})
 
     assert response.status_code == 409
-    assert "already exists" in response.json()["detail"]
+    assert response.json()["error"]["code"] == "conflict"
+    assert "already exists" in response.json()["error"]["message"]
 
 
 @pytest.mark.parametrize(

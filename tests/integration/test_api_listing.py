@@ -44,11 +44,13 @@ class TestCreate:
         assert response.status_code == 200
         assert response.json() == created
 
+
     def test_unknown_agent_returns_422(self, api, payload):
         response = api.post("/listings", json={**payload, "agent_id": str(uuid.uuid4())})
 
         assert response.status_code == 422
-        assert "does not exist" in response.json()["detail"]
+        assert response.json()["error"]["code"] == "invalid_reference"
+        assert "does not exist" in response.json()["error"]["message"]
 
     @pytest.mark.parametrize(
         "overrides",
