@@ -55,22 +55,6 @@ Interactive API docs are available at <http://localhost:8000/docs>.
 
 Stop the stack with `Ctrl+C` or `docker compose down`. Add `-v` to also delete the database volume.
 
-### Run locally without Docker for the API
-
-Run only the database in Docker and the API on your machine:
-
-```bash
-docker compose up -d db
-uv sync
-uv run uvicorn app.main:app --reload
-```
-
-For this mode, `.env` must point at the published database port (not the Docker-internal hostname):
-
-```env
-DATABASE_URL=postgresql+psycopg://listings:change-me@localhost:5433/listings_db
-```
-
 ### Configuration
 
 | Variable            | Description                                                                                                                   |
@@ -79,6 +63,14 @@ DATABASE_URL=postgresql+psycopg://listings:change-me@localhost:5433/listings_db
 | `POSTGRES_PASSWORD` | Database password                                                                                                             |
 | `POSTGRES_DB`       | Database name                                                                                                                 |
 | `DATABASE_URL`      | SQLAlchemy connection URL. Compose sets this for the API container; set it in `.env` only when running the API outside Docker |
+
+### Database migrations
+
+With the database running, apply the schema:
+
+```bash
+uv run alembic upgrade head
+```
 
 ## Architecture
 
